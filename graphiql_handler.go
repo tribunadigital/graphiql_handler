@@ -1,27 +1,26 @@
 package graphiql_handler
 
 import (
-    "strings"
-    "net/http"
+	"net/http"
+	"strings"
 )
 
-
 type GraphiQL struct {
-    GraphQLPath string
+	GraphQLPath string
 }
 
 func (h GraphiQL) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
-        w.WriteHeader(http.StatusMethodNotAllowed)
+		w.WriteHeader(http.StatusMethodNotAllowed)
 		w.Write([]byte(errMethodNotSupported))
 		return
 	}
-    html := strings.Replace(graphiql, "{{.GraphQLPath}}", h.GraphQLPath, -1)
+	html := strings.Replace(graphiql, "{{.GraphQLPath}}", h.GraphQLPath, -1)
 	w.Write([]byte(html))
 }
 
 const (
-    graphiql = `
+	graphiql = `
     <!DOCTYPE html>
     <html>
     	<head>
@@ -59,5 +58,5 @@ const (
     </html>
     `
 
-    errMethodNotSupported = `Only GET requests are supported`
+	errMethodNotSupported = `Only GET requests are supported`
 )
